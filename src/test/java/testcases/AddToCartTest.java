@@ -38,6 +38,7 @@ public class AddToCartTest {
         Assert.assertTrue(cartProduct.contains("Brocolli"), "Cart product name does not contain 'Brocolli - 1 Kg'");
 
         Assert.assertEquals(cart.getQuantity(), "1");
+        System.out.println("Product added to cart successfully with correct quantity.");
     }
 
     @AfterMethod
