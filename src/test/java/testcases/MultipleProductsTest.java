@@ -27,7 +27,6 @@ public class MultipleProductsTest {
         products.searchProduct("Cucumber");
         products.addProductToCart();
 
-        driver.navigate().refresh();
 
         products.searchProduct("Tomato");
         products.addProductToCart();
