@@ -9,15 +9,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.ConfigReaders;
+import utils.UIActions;
 import utils.WaitUtils;
 
 public class ProductsPage {
 
     WebDriver driver;
+    UIActions uiActions;
     WaitUtils wait;
-    public ProductsPage(WebDriver driver) {
-        this.driver = driver;
-    }
+    ConfigReaders configReaders =  new ConfigReaders();
 
     By search = By.xpath("//input[@type='search']");
 
@@ -29,17 +30,24 @@ public class ProductsPage {
 
     By addToCartBtn = By.xpath("//button[text()='ADD TO CART']");
 
-    By cartIcon =
-            By.xpath("//img[@alt='Cart']");
+    By cartIcon = By.xpath("//img[@alt='Cart']");
 
-    public void searchProduct(String product) {
-        driver.findElement(search).clear();
-        driver.findElement(search).sendKeys(product);
-        driver.findElement(searchButton).click();
+    public ProductsPage(WebDriver driver) {
+        this.driver = driver;
+        this.uiActions =  new UIActions(driver);
+        this.wait = new WaitUtils(driver, Duration.ofSeconds(configReaders.getWait()));
+
+    }
+
+    public void searchProduct(String value) throws InterruptedException {
+
+        uiActions.clearAndType(search, value);
+        uiActions.click(searchButton);
+
         // Wait for results to be visible (first product)
-        wait = new WaitUtils(driver);
+        Thread.sleep(1000);
         wait.waitForElementToBePresent(productInResult);
-        System.out.println("Searching for product " + product);
+        System.out.println("Searching for product " + driver.findElement(products).getText());
     }
 
     public String getProductName()  {

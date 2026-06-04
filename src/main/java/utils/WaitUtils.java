@@ -12,14 +12,14 @@ public class WaitUtils {
 
     WebDriver driver;
     WebDriverWait wait;
-    public WaitUtils(WebDriver driver) {
+    ConfigReaders configReaders =  new ConfigReaders();
+    public WaitUtils(WebDriver driver, Duration wait) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(configReaders.getWait()));
     }
     public void waitForElementToBeVisible(By element) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
     }
-
 
     public boolean waitForElementToBePresent(By element) {
         try {

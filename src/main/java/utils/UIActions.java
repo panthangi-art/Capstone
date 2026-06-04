@@ -1,55 +1,57 @@
 package utils;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 
 public class UIActions {
-
-    public static void click(WebElement element) {
-        element.click();
+    WebDriver driver;
+    WebDriverWait wait;
+    public UIActions(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public static void type(WebElement element, String value) {
-        element.clear();
-        element.sendKeys(value);
+    public void clearAndType(By element, String text) {
+        driver.findElement(element).clear();
+        driver.findElement(element).sendKeys(text);
     }
-    public void takeScreenshot(WebDriver driver,
-                                      String testName) {
 
-        TakesScreenshot ts =
-                (TakesScreenshot) driver;
+    public void click(By element) {
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+        driver.findElement(element).click();
+    }
 
-        File source =
-                ts.getScreenshotAs(OutputType.FILE);
+    public void selectByVisibleText(By element, String value){
+        WebElement dropdown = driver.findElement(element);
+        Select select  = new Select(dropdown);
+        select.selectByVisibleText(value);
+    }
 
-        String timestamp =
-                new SimpleDateFormat("yyyyMMdd_HHmmss")
-                        .format(new Date());
 
-        File destination =
-                new File("./screenshots/"
-                        + testName + "_"
-                        + timestamp + ".png");
+    public static String takeScreenshot(WebDriver driver,
+                                           String testName)
+            throws IOException {
 
-        try {
+        File src =
+                ((TakesScreenshot) driver)
+                        .getScreenshotAs(OutputType.FILE);
 
-            FileUtils.copyFile(source, destination);
+        String path =
+                "screenshots/" + testName + ".png";
 
-            System.out.println(
-                    "Screenshot saved: "
-                            + destination.getAbsolutePath());
+        File dest = new File(path);
 
-        } catch (IOException e) {
+        FileUtils.copyFile(src, dest);
 
-            e.printStackTrace();
-        }
+        return path;
     }
 }

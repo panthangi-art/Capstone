@@ -10,5 +10,4 @@
             <class name="testcases.NavigationTest"/>
     </classes>
     </test>
-
 </suite>

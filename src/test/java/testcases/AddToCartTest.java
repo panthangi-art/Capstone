@@ -1,5 +1,6 @@
 package testcases;
 
+import baseTest.BasePageTest;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -9,23 +10,23 @@ import pages.ProductsPage;
 import utils.DriverFactory;
 import utils.UIActions;
 
-public class AddToCartTest {
+import java.io.IOException;
 
-    WebDriver driver;
+public class AddToCartTest extends BasePageTest {
+
+
     UIActions actions;
+    ProductsPage products;
+    CartPage cart;
     @BeforeMethod
     public void setup() {
-        actions = new UIActions();
-        driver = DriverFactory.initializeDriver();
-
+        actions = new UIActions(driver);
+        products = new ProductsPage(driver);
+        cart = new CartPage(driver);
     }
 
     @Test
-    public void verifyAddToCart() {
-
-        ProductsPage products = new ProductsPage(driver);
-
-        CartPage cart = new CartPage(driver);
+    public void verifyAddToCart() throws InterruptedException {
 
         products.searchProduct("Brocolli");
 
@@ -41,9 +42,5 @@ public class AddToCartTest {
         System.out.println("Product added to cart successfully with correct quantity.");
     }
 
-    @AfterMethod
-    public void tearDown() {
-        actions.takeScreenshot(driver,"verifyAddToCart");
-        driver.quit();
-    }
+
 }

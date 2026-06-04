@@ -1,5 +1,6 @@
 package testcases;
 
+import baseTest.BasePageTest;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -8,23 +9,25 @@ import pages.ProductsPage;
 import utils.DriverFactory;
 import utils.UIActions;
 
-public class MultipleProductsTest {
+import java.io.IOException;
 
-    WebDriver driver;
+public class MultipleProductsTest extends BasePageTest {
+
+
     UIActions actions;
     @BeforeMethod
     public void setup() {
-        actions = new UIActions();
-        driver = DriverFactory.initializeDriver();
+        actions = new UIActions(driver);
+
     }
 
     @Test
-    public void verifyMultipleProducts() {
+    public void verifyMultipleProducts() throws InterruptedException {
 
         ProductsPage products =
                 new ProductsPage(driver);
 
-        products.searchProduct("Cucumber");
+        products.searchProduct("cucumber");
         products.addProductToCart();
 
 
@@ -34,9 +37,5 @@ public class MultipleProductsTest {
         Assert.assertTrue(true);
     }
 
-    @AfterMethod
-    public void tearDown() {
-        actions.takeScreenshot(driver,"verifyMultipleProducts");
-        driver.quit();
-    }
+
 }

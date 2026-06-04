@@ -1,28 +1,30 @@
 package testcases;
 
+import baseTest.BasePageTest;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import utils.ConfigReaders;
 import utils.DriverFactory;
 import utils.UIActions;
 
-public class NavigationTest {
+import java.io.IOException;
 
-    WebDriver driver;
+public class NavigationTest extends BasePageTest {
+
     UIActions actions;
+    ConfigReaders configReaders;
     @BeforeMethod
     public void setup() {
-        actions = new UIActions();
-        driver = DriverFactory.initializeDriver();
+        actions = new UIActions(driver);
+        configReaders = new ConfigReaders();
     }
 
     @Test
     public void verifyNavigation() {
 
-        String expectedUrl =
-                "https://rahulshettyacademy.com/seleniumPractise/#/";
-
+        String expectedUrl =  configReaders.getPageURL();
         driver.navigate().refresh();
 
         driver.navigate().back();
@@ -34,9 +36,5 @@ public class NavigationTest {
                 expectedUrl);
     }
 
-    @AfterMethod
-    public void tearDown() {
-        actions.takeScreenshot(driver,"verifyNavigation");
-        driver.quit();
-    }
+
 }

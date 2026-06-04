@@ -1,5 +1,6 @@
 package testcases;
 
+import baseTest.BasePageTest;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -10,32 +11,25 @@ import pages.ProductsPage;
 import utils.DriverFactory;
 import utils.UIActions;
 
-public class SearchProductTest {
+public class SearchProductTest extends BasePageTest {
 
-    WebDriver driver;
+    ProductsPage products;
     UIActions actions;
     @BeforeMethod
     public void setup() {
-        actions = new UIActions();
-        driver = DriverFactory.initializeDriver();
+        actions = new UIActions(driver);
+        products = new ProductsPage(driver);
     }
 
     @Test
-    public void verifySearchProduct() {
+    public void verifySearchProduct() throws InterruptedException {
 
-        ProductsPage products = new ProductsPage(driver);
-
-        products.searchProduct("Cucumber");
+        products.searchProduct("cucumber");
 
         String productName = products.getProductName();
 
-        System.out.println(productName);
         Assert.assertTrue(productName.contains("Cucumber - 1 Kg"), "Product name does not contain 'Cucumber - 1 Kg'");
     }
 
-    @AfterMethod
-    public void tearDown() {
-        actions.takeScreenshot(driver,"verifySearchProduct");
-        driver.quit();
-    }
+
 }

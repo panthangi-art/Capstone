@@ -1,5 +1,6 @@
 package testcases;
 
+import baseTest.BasePageTest;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -11,28 +12,30 @@ import utils.DriverFactory;
 import utils.UIActions;
 import utils.WaitUtils;
 
-public class PlaceOrderTest {
+import java.io.IOException;
 
-    WebDriver driver;
-    WaitUtils wait;
+import static baseTest.BasePageTest.driver;
+
+public class PlaceOrderTest extends BasePageTest {
+
+
+    ProductsPage products;
+    CartPage cart;
+    CheckOutPage checkout;
     UIActions actions;
     @BeforeMethod
     public void setup() {
-        actions = new UIActions();
-        driver = DriverFactory.initializeDriver();
+        actions = new UIActions(driver);
+        products = new ProductsPage(driver);
+        cart = new CartPage(driver);
+        checkout = new CheckOutPage(driver);
+
     }
 
     @Test
     public void verifyPlaceOrder() throws InterruptedException {
-        wait = new WaitUtils(driver);
 
-        ProductsPage products = new ProductsPage(driver);
-
-        CartPage cart = new CartPage(driver);
-
-        CheckOutPage checkout = new CheckOutPage(driver);
-
-        products.searchProduct("Cucumber");
+        products.searchProduct("cucumber");
 
         products.addProductToCart();
 
@@ -53,9 +56,5 @@ public class PlaceOrderTest {
 
 
 
-    @AfterMethod
-    public void tearDown() {
-        actions.takeScreenshot(driver,"verifyPlaceOrder");
-        driver.quit();
-    }
+
 }
